@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Purva Patil — Agriculture Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* ===========================
+       CSS CUSTOM PROPERTIES
+    =========================== */
+    :root {
+      --forest:    #1a3a2a;
+      --emerald:   #2d6a4f;
+      --sage:      #52b788;
+      --mint:      #95d5b2;
+      --cream:     #f8f4ec;
+      --warm:      #e9dcc9;
+      --earth:     #8b6f47;
+      --gold:      #c9a94a;
+      --white:     #ffffff;
+      --text-dark: #1c2b1e;
+      --text-mid:  #4a5e4e;
+      --text-light:#7a9480;
+      --card-bg:   rgba(255,255,255,0.72);
+      --glass:     rgba(255,255,255,0.15);
+      --shadow-sm: 0 4px 20px rgba(45,106,79,0.12);
+      --shadow-md: 0 12px 40px rgba(45,106,79,0.18);
+      --shadow-lg: 0 24px 60px rgba(26,58,42,0.22);
+      --radius:    18px;
+      --radius-sm: 10px;
+      --transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    /* ===========================
+       RESET & BASE
+    =========================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+    ul { list-style: none; }
+
+    /* ===========================
+       LOADER
+    =========================== */
+    #loader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--forest);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 20px;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    #loader.hide { opacity: 0; visibility: hidden; }
+    .loader-icon {
+      font-size: 3rem; color: var(--sage);
+      animation: leafSpin 1.4s ease-in-out infinite;
+    }
+    .loader-text {
+      font-family: 'Playfair Display', serif;
+      color: var(--cream); font-size: 1.2rem; letter-spacing: 0.2em;
+      animation: fadeUpIn 0.8s ease forwards;
+    }
+    .loader-bar {
+      width: 180px; height: 3px;
+      background: rgba(255,255,255,0.15); border-radius: 10px; overflow: hidden;
+    }
+    .loader-bar-fill {
+      height: 100%; background: var(--sage); border-radius: 10px;
+      animation: loadFill 1.8s ease forwards;
+    }
+    @keyframes leafSpin {
+      0%,100% { transform: rotate(-15deg) scale(1); }
+      50%      { transform: rotate(15deg) scale(1.1); }
+    }
+    @keyframes loadFill {
+      from { width: 0; } to { width: 100%; }
+    }
+    @keyframes fadeUpIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===========================
+       NAVBAR
+    =========================== */
+    #navbar {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+      padding: 18px 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: all var(--transition);
+    }
+    #navbar.scrolled {
+      background: rgba(248, 244, 236, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 2px 24px rgba(45,106,79,0.10);
+      padding: 12px 5%;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--white);
+      transition: color var(--transition);
+    }
+    #navbar.scrolled .nav-logo { color: var(--forest); }
+    .nav-logo span { color: var(--sage); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      font-size: 0.875rem; font-weight: 500; letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.85);
+      transition: color var(--transition);
+      position: relative;
+    }
+    .nav-links a::after {
+      content:''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 2px; background: var(--sage);
+      transition: width var(--transition);
+    }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a:hover { color: var(--sage); }
+    #navbar.scrolled .nav-links a { color: var(--text-mid); }
+    #navbar.scrolled .nav-links a:hover { color: var(--emerald); }
+    .hamburger {
+      display: none; cursor: pointer; flex-direction: column;
+      gap: 5px; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 26px; height: 2px;
+      background: var(--white); border-radius: 2px;
+      transition: all var(--transition);
+    }
+    #navbar.scrolled .hamburger span { background: var(--forest); }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu {
+      display: none; position: fixed; top: 70px; left: 0;
+      width: 100%; background: var(--cream);
+      padding: 1.5rem 5%; box-shadow: var(--shadow-md);
+      flex-direction: column; gap: 1.2rem; z-index: 999;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 1rem; font-weight: 500; color: var(--text-dark);
+      padding: 0.5rem 0; border-bottom: 1px solid var(--warm);
+    }
+
+    /* ===========================
+       HERO SECTION
+    =========================== */
+    #hero {
+      min-height: 100vh;
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg,
+        #0d2718 0%, #1a3a2a 30%, #2d6a4f 65%, #3a8f68 100%);
+    }
+    /* Animated particles */
+    .particles { position: absolute; inset: 0; overflow: hidden; }
+    .particle {
+      position: absolute; border-radius: 50%;
+      background: rgba(149,213,178,0.18);
+      animation: floatUp linear infinite;
+    }
+    .particle:nth-child(1)  { width:6px; height:6px; left:10%; animation-duration:8s; animation-delay:0s; }
+    .particle:nth-child(2)  { width:10px; height:10px; left:20%; animation-duration:11s; animation-delay:1s; }
+    .particle:nth-child(3)  { width:4px; height:4px; left:35%; animation-duration:9s; animation-delay:2s; }
+    .particle:nth-child(4)  { width:8px; height:8px; left:50%; animation-duration:13s; animation-delay:0.5s; }
+    .particle:nth-child(5)  { width:5px; height:5px; left:65%; animation-duration:10s; animation-delay:3s; }
+    .particle:nth-child(6)  { width:12px; height:12px; left:75%; animation-duration:14s; animation-delay:1.5s; }
+    .particle:nth-child(7)  { width:7px; height:7px; left:85%; animation-duration:8s; animation-delay:0.8s; }
+    .particle:nth-child(8)  { width:9px; height:9px; left:92%; animation-duration:12s; animation-delay:2.5s; }
+    @keyframes floatUp {
+      from { transform: translateY(110vh) scale(0.5); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.8; }
+      to   { transform: translateY(-20vh) scale(1.2); opacity: 0; }
+    }
+    /* SVG Field silhouette at bottom */
+    .hero-grass {
+      position: absolute; bottom: 0; left: 0; width: 100%; z-index: 1;
+    }
+    /* Circular accent rings */
+    .hero-ring {
+      position: absolute; border-radius: 50%;
+      border: 1px solid rgba(149,213,178,0.12);
+      animation: ringPulse 6s ease-in-out infinite;
+    }
+    .hero-ring:nth-child(1) { width:400px; height:400px; top:50%; left:50%; transform:translate(-50%,-50%); }
+    .hero-ring:nth-child(2) { width:600px; height:600px; top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:1.5s; }
+    .hero-ring:nth-child(3) { width:800px; height:800px; top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:3s; }
+    @keyframes ringPulse {
+      0%,100% { opacity: 0.4; transform: translate(-50%,-50%) scale(1); }
+      50%      { opacity: 0.08; transform: translate(-50%,-50%) scale(1.04); }
+    }
+    .hero-content {
+      position: relative; z-index: 2; max-width: 800px; padding: 0 20px;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(149,213,178,0.15); border: 1px solid rgba(149,213,178,0.3);
+      padding: 7px 18px; border-radius: 50px;
+      font-size: 0.78rem; color: var(--mint); letter-spacing: 0.12em;
+      text-transform: uppercase; font-weight: 600;
+      margin-bottom: 1.5rem;
+      animation: fadeUpIn 0.8s ease 0.3s both;
+    }
+    .hero-badge i { font-size: 0.75rem; }
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900; line-height: 1;
+      color: var(--white);
+      margin-bottom: 1rem;
+      animation: fadeUpIn 0.9s ease 0.5s both;
+    }
+    .hero-name .accent { color: var(--sage); font-style: italic; }
+    .hero-tagline {
+      font-size: clamp(1rem, 2vw, 1.25rem); font-weight: 300;
+      color: rgba(255,255,255,0.75); letter-spacing: 0.03em;
+      max-width: 520px; margin: 0 auto 2.5rem;
+      animation: fadeUpIn 1s ease 0.7s both;
+    }
+    .hero-cta {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      animation: fadeUpIn 1s ease 0.9s both;
+    }
+    .btn-primary {
+      background: var(--sage); color: var(--forest);
+      padding: 14px 32px; border-radius: 50px;
+      font-weight: 600; font-size: 0.9rem; letter-spacing: 0.04em;
+      border: none; cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: 0 8px 30px rgba(82,183,136,0.35);
+    }
+    .btn-primary:hover {
+      background: var(--mint); transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(82,183,136,0.45);
+    }
+    .btn-outline {
+      background: transparent; color: var(--white);
+      padding: 13px 32px; border-radius: 50px;
+      font-weight: 500; font-size: 0.9rem; letter-spacing: 0.04em;
+      border: 1.5px solid rgba(255,255,255,0.4); cursor: pointer;
+      transition: all var(--transition);
+    }
+    .btn-outline:hover {
+      border-color: var(--sage); color: var(--sage);
+      transform: translateY(-3px);
+      background: rgba(82,183,136,0.1);
+    }
+    .hero-scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      z-index: 2; display: flex; flex-direction: column;
+      align-items: center; gap: 6px;
+      color: rgba(255,255,255,0.5); font-size: 0.7rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      animation: fadeUpIn 1s ease 1.5s both;
+    }
+    .scroll-mouse {
+      width: 24px; height: 38px; border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 12px; display: flex; align-items: flex-start;
+      justify-content: center; padding-top: 5px;
+    }
+    .scroll-wheel {
+      width: 3px; height: 7px; background: var(--sage); border-radius: 2px;
+      animation: scrollBounce 2s ease infinite;
+    }
+    @keyframes scrollBounce {
+      0%,100% { transform: translateY(0); opacity: 1; }
+      50%      { transform: translateY(10px); opacity: 0.3; }
+    }
+
+    /* ===========================
+       SECTION COMMON
+    =========================== */
+    section { padding: 100px 5%; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--emerald); margin-bottom: 0.75rem;
+    }
+    .section-label::before {
+      content:''; display: block; width: 28px; height: 2px; background: var(--sage);
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700; line-height: 1.15;
+      color: var(--forest); margin-bottom: 1rem;
+    }
+    .section-subtitle {
+      font-size: 1.05rem; color: var(--text-mid); max-width: 560px;
+      font-weight: 300; line-height: 1.75;
+    }
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* ===========================
+       ABOUT SECTION
+    =========================== */
+    #about { background: var(--cream); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1.4fr;
+      gap: 4rem; align-items: center; margin-top: 3rem;
+    }
+    .about-photo-wrap {
+      position: relative;
+    }
+    .about-photo-frame {
+      position: relative; border-radius: 24px; overflow: hidden;
+      aspect-ratio: 4/5;
+      box-shadow: var(--shadow-lg);
+    }
+    .about-photo-frame img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top center;
+      transition: transform 0.6s ease;
+    }
+    .about-photo-frame:hover img { transform: scale(1.03); }
+    .photo-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, var(--emerald), var(--forest));
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 10px;
+    }
+    .photo-placeholder i { font-size: 5rem; color: rgba(255,255,255,0.3); }
+    .photo-placeholder span { color: rgba(255,255,255,0.5); font-size: 0.8rem; }
+    .about-badge-float {
+      position: absolute; bottom: -16px; right: -16px;
+      background: var(--gold); color: var(--forest);
+      border-radius: var(--radius); padding: 16px 20px;
+      box-shadow: var(--shadow-md);
+      font-weight: 700; font-size: 0.8rem; text-align: center;
+      line-height: 1.3;
+    }
+    .about-badge-float .big { font-size: 1.8rem; font-family: 'Playfair Display', serif; }
+    .about-photo-accent {
+      position: absolute; top: -20px; left: -20px; z-index: -1;
+      width: 100%; height: 100%;
+      border: 2px dashed rgba(82,183,136,0.3); border-radius: 24px;
+    }
+    .about-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; color: var(--forest); margin-bottom: 1rem;
+    }
+    .about-text p {
+      color: var(--text-mid); line-height: 1.85;
+      font-size: 1rem; margin-bottom: 1.2rem; font-weight: 300;
+    }
+    .about-stats {
+      display: flex; gap: 2rem; margin: 2rem 0; flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 700; color: var(--emerald);
+    }
+    .stat-label { font-size: 0.78rem; color: var(--text-light); font-weight: 500; }
+    .about-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1.5rem; }
+    .tag {
+      background: rgba(82,183,136,0.12); border: 1px solid rgba(82,183,136,0.25);
+      color: var(--emerald); padding: 5px 14px; border-radius: 50px;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.03em;
+    }
+    .btn-download {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--forest); color: var(--white);
+      padding: 13px 28px; border-radius: 50px;
+      font-weight: 600; font-size: 0.88rem;
+      transition: all var(--transition); margin-top: 1.8rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-download:hover {
+      background: var(--emerald); transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* ===========================
+       EDUCATION SECTION
+    =========================== */
+    #education {
+      background: linear-gradient(180deg, #f0ebe0 0%, var(--cream) 100%);
+    }
+    .timeline { position: relative; margin-top: 3.5rem; padding-left: 48px; }
+    .timeline::before {
+      content:''; position: absolute;
+      left: 18px; top: 0; bottom: 0;
+      width: 2px; background: linear-gradient(to bottom, var(--sage), transparent);
+    }
+    .timeline-item {
+      position: relative; margin-bottom: 3rem;
+    }
+    .timeline-dot {
+      position: absolute; left: -38px; top: 6px;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--white); border: 3px solid var(--sage);
+      box-shadow: 0 0 0 5px rgba(82,183,136,0.15);
+      transition: all var(--transition);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .timeline-item:hover .timeline-dot {
+      background: var(--sage);
+      box-shadow: 0 0 0 8px rgba(82,183,136,0.2);
+    }
+    .timeline-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.8);
+      border-radius: var(--radius); padding: 2rem;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition);
+    }
+    .timeline-card:hover { transform: translateX(6px); box-shadow: var(--shadow-md); }
+    .timeline-year {
+      display: inline-block; background: rgba(82,183,136,0.15);
+      color: var(--emerald); padding: 3px 12px; border-radius: 50px;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 0.75rem;
+    }
+    .timeline-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; color: var(--forest); margin-bottom: 0.3rem;
+    }
+    .timeline-card .institution {
+      color: var(--emerald); font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;
+    }
+    .timeline-card p { color: var(--text-mid); font-size: 0.9rem; font-weight: 300; }
+    .timeline-card .score {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--forest); color: var(--white);
+      padding: 4px 14px; border-radius: 50px;
+      font-size: 0.8rem; font-weight: 700; margin-top: 0.75rem;
+    }
+
+    /* ===========================
+       SKILLS SECTION
+    =========================== */
+    #skills { background: var(--cream); }
+    .skills-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; margin-top: 3.5rem;
+    }
+    .skills-col h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; color: var(--forest);
+      display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem;
+    }
+    .skills-col h3 i { color: var(--sage); font-size: 1.2rem; }
+    .skill-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: var(--radius); padding: 1.2rem 1.5rem;
+      margin-bottom: 0.9rem;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition); cursor: default;
+    }
+    .skill-card:hover {
+      transform: translateY(-4px); box-shadow: var(--shadow-md);
+      border-color: rgba(82,183,136,0.3);
+    }
+    .skill-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 0.7rem;
+    }
+    .skill-name {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 600; font-size: 0.88rem; color: var(--text-dark);
+    }
+    .skill-name .icon-circle {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: rgba(82,183,136,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; color: var(--emerald);
+    }
+    .skill-pct { font-size: 0.75rem; color: var(--text-light); font-weight: 600; }
+    .skill-bar {
+      height: 6px; background: var(--warm); border-radius: 10px; overflow: hidden;
+    }
+    .skill-bar-fill {
+      height: 100%; border-radius: 10px;
+      background: linear-gradient(90deg, var(--sage), var(--mint));
+      width: 0; transition: width 1.2s cubic-bezier(0.23,1,0.32,1);
+    }
+    /* Digital skill pills */
+    .digital-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 0.5rem; }
+    .digital-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--card-bg); border: 1px solid rgba(255,255,255,0.9);
+      border-radius: 50px; padding: 9px 18px;
+      font-size: 0.82rem; font-weight: 600; color: var(--text-dark);
+      box-shadow: var(--shadow-sm); cursor: default;
+      transition: all var(--transition);
+    }
+    .digital-pill:hover {
+      background: var(--forest); color: var(--white);
+      transform: translateY(-3px); box-shadow: var(--shadow-md);
+    }
+    .digital-pill:hover i { color: var(--sage); }
+    .digital-pill i { color: var(--emerald); font-size: 0.9rem; }
+
+    /* ===========================
+       EXPERIENCE / LEADERSHIP
+    =========================== */
+    #experience {
+      background: linear-gradient(180deg, #eef5ee 0%, var(--cream) 100%);
+    }
+    .experience-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem; margin-top: 3.5rem;
+    }
+    .exp-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: var(--radius); padding: 2rem;
+      box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+      transition: all var(--transition);
+    }
+    .exp-card::before {
+      content:''; position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: linear-gradient(to bottom, var(--sage), var(--emerald));
+    }
+    .exp-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .exp-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: linear-gradient(135deg, var(--emerald), var(--forest));
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.2rem; font-size: 1.3rem; color: var(--white);
+      box-shadow: 0 6px 20px rgba(45,106,79,0.3);
+    }
+    .exp-role {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; color: var(--forest); margin-bottom: 0.3rem;
+    }
+    .exp-org {
+      color: var(--emerald); font-weight: 600; font-size: 0.85rem;
+      margin-bottom: 0.3rem;
+    }
+    .exp-period {
+      font-size: 0.75rem; color: var(--text-light); margin-bottom: 1rem;
+    }
+    .exp-desc { color: var(--text-mid); font-size: 0.9rem; line-height: 1.75; font-weight: 300; }
+    .exp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 1rem; }
+    .exp-tag {
+      background: rgba(82,183,136,0.12); color: var(--emerald);
+      padding: 3px 10px; border-radius: 50px;
+      font-size: 0.72rem; font-weight: 600;
+    }
+
+    /* ===========================
+       LANGUAGES
+    =========================== */
+    #languages { background: var(--cream); padding: 40px 5% 80px; }
+    .lang-grid {
+      display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 2.5rem;
+    }
+    .lang-card {
+      background: var(--card-bg); border: 1px solid rgba(255,255,255,0.9);
+      border-radius: var(--radius); padding: 1.5rem 2rem;
+      text-align: center; flex: 1; min-width: 140px;
+      box-shadow: var(--shadow-sm); transition: all var(--transition);
+    }
+    .lang-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .lang-flag { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .lang-name { font-weight: 700; color: var(--forest); font-size: 1rem; }
+    .lang-level { font-size: 0.75rem; color: var(--text-light); margin-top: 2px; }
+
+    /* ===========================
+       INTERESTS SECTION
+    =========================== */
+    #interests { background: var(--forest); }
+    #interests .section-label { color: var(--sage); }
+    #interests .section-title { color: var(--white); }
+    #interests .section-subtitle { color: rgba(255,255,255,0.6); }
+    .interest-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem; margin-top: 3.5rem;
+    }
+    .interest-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius); padding: 2rem 1.5rem;
+      text-align: center; cursor: default;
+      transition: all var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .interest-card::before {
+      content:''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(82,183,136,0.15), transparent);
+      opacity: 0; transition: opacity var(--transition);
+    }
+    .interest-card:hover { transform: translateY(-6px); border-color: rgba(82,183,136,0.4); }
+    .interest-card:hover::before { opacity: 1; }
+    .interest-icon {
+      font-size: 2.2rem; margin-bottom: 1rem;
+      display: block;
+    }
+    .interest-name {
+      color: var(--white); font-weight: 600; font-size: 0.9rem;
+    }
+    .interest-desc { color: rgba(255,255,255,0.45); font-size: 0.78rem; margin-top: 4px; }
+
+    /* ===========================
+       CONTACT SECTION
+    =========================== */
+    #contact { background: linear-gradient(180deg, var(--cream) 0%, #e8e0d0 100%); }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1.2fr;
+      gap: 4rem; margin-top: 3.5rem; align-items: start;
+    }
+    .contact-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; color: var(--forest); margin-bottom: 1.2rem;
+    }
+    .contact-info p {
+      color: var(--text-mid); line-height: 1.8; font-weight: 300;
+      margin-bottom: 2rem;
+    }
+    .contact-item {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 1.2rem; padding: 14px 18px;
+      background: var(--card-bg); border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,0.9);
+      box-shadow: var(--shadow-sm); transition: all var(--transition);
+    }
+    .contact-item:hover { transform: translateX(5px); box-shadow: var(--shadow-md); }
+    .contact-item-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--emerald), var(--forest));
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white); font-size: 1rem; flex-shrink: 0;
+    }
+    .contact-item-text { font-size: 0.85rem; }
+    .contact-item-label { color: var(--text-light); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+    .contact-item-val { color: var(--text-dark); font-weight: 500; margin-top: 1px; }
+    .contact-socials { display: flex; gap: 12px; margin-top: 1.5rem; }
+    .social-btn {
+      width: 46px; height: 46px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; transition: all var(--transition);
+      border: 1.5px solid;
+    }
+    .social-btn.linkedin {
+      border-color: #0077b5; color: #0077b5; background: rgba(0,119,181,0.07);
+    }
+    .social-btn.linkedin:hover { background: #0077b5; color: white; transform: translateY(-3px); }
+    .social-btn.email {
+      border-color: var(--emerald); color: var(--emerald); background: rgba(45,106,79,0.07);
+    }
+    .social-btn.email:hover { background: var(--emerald); color: white; transform: translateY(-3px); }
+    /* Contact Form */
+    .contact-form-wrap {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: var(--radius); padding: 2.5rem;
+      box-shadow: var(--shadow-md);
+    }
+    .form-group { margin-bottom: 1.3rem; }
+    .form-group label {
+      display: block; font-size: 0.78rem; font-weight: 600;
+      color: var(--text-mid); letter-spacing: 0.05em;
+      text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%; background: rgba(255,255,255,0.8);
+      border: 1.5px solid var(--warm); border-radius: var(--radius-sm);
+      padding: 12px 16px; font-size: 0.9rem; color: var(--text-dark);
+      font-family: 'DM Sans', sans-serif;
+      transition: all var(--transition); outline: none;
+      resize: none;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(82,183,136,0.15);
+      background: var(--white);
+    }
+    .form-group textarea { height: 130px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .btn-send {
+      width: 100%; background: linear-gradient(135deg, var(--emerald), var(--forest));
+      color: var(--white); border: none; padding: 15px;
+      border-radius: var(--radius-sm); font-size: 0.95rem;
+      font-weight: 600; cursor: pointer; letter-spacing: 0.04em;
+      transition: all var(--transition); box-shadow: var(--shadow-sm);
+      font-family: 'DM Sans', sans-serif;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-send:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+    /* ===========================
+       FOOTER
+    =========================== */
+    footer {
+      background: var(--forest); padding: 3rem 5%;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; font-weight: 700;
+      color: var(--white); margin-bottom: 1rem;
+    }
+    .footer-logo span { color: var(--sage); }
+    .footer-tagline {
+      color: rgba(255,255,255,0.5); font-size: 0.85rem;
+      margin-bottom: 1.8rem; font-weight: 300;
+    }
+    .footer-socials { display: flex; justify-content: center; gap: 14px; margin-bottom: 2rem; }
+    .footer-social {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.6); font-size: 1rem;
+      transition: all var(--transition);
+    }
+    .footer-social:hover {
+      background: var(--sage); color: var(--forest);
+      border-color: var(--sage); transform: translateY(-3px);
+    }
+    .footer-copy {
+      color: rgba(255,255,255,0.3); font-size: 0.78rem;
+    }
+    .footer-copy a { color: var(--sage); }
+
+    /* ===========================
+       BACK TO TOP
+    =========================== */
+    #back-top {
+      position: fixed; bottom: 24px; right: 24px; z-index: 800;
+      width: 48px; height: 48px; border-radius: 14px;
+      background: var(--emerald); color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; cursor: pointer;
+      box-shadow: var(--shadow-md); border: none;
+      opacity: 0; transform: translateY(20px);
+      transition: all var(--transition);
+      pointer-events: none;
+    }
+    #back-top.show {
+      opacity: 1; transform: translateY(0); pointer-events: auto;
+    }
+    #back-top:hover { background: var(--forest); transform: translateY(-3px); }
+
+    /* ===========================
+       DECORATIVE DIVIDER
+    =========================== */
+    .wave-divider { width: 100%; overflow: hidden; line-height: 0; }
+    .wave-divider svg { display: block; }
+
+    /* ===========================
+       RESPONSIVE
+    =========================== */
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-photo-wrap { max-width: 300px; margin: 0 auto; }
+      .skills-layout { grid-template-columns: 1fr; gap: 2rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+    @media (max-width: 700px) {
+      section { padding: 70px 6%; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero-ring { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+      .interest-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 400px) {
+      .interest-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== LOADER ===== -->
+<div id="loader">
+  <div class="loader-icon"><i class="fas fa-seedling"></i></div>
+  <p class="loader-text">PURVA PATIL</p>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Purva<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Leadership</a></li>
+    <li><a href="#interests">Interests</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMobileMenu()">About</a>
+  <a href="#education" onclick="closeMobileMenu()">Education</a>
+  <a href="#skills" onclick="closeMobileMenu()">Skills</a>
+  <a href="#experience" onclick="closeMobileMenu()">Leadership</a>
+  <a href="#interests" onclick="closeMobileMenu()">Interests</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="particles">
+    <span class="particle"></span><span class="particle"></span>
+    <span class="particle"></span><span class="particle"></span>
+    <span class="particle"></span><span class="particle"></span>
+    <span class="particle"></span><span class="particle"></span>
+  </div>
+  <div class="hero-ring"></div>
+  <div class="hero-ring"></div>
+  <div class="hero-ring"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <i class="fas fa-leaf"></i> B.Sc. Agriculture (Hons.) · Kolhapur, India
+    </div>
+    <h1 class="hero-name">
+      Purva <span class="accent">Patil</span>
+    </h1>
+    <p class="hero-tagline">
+      Bridging the fields and the future — through Agronomy, Sustainable Farming & Agri-Tech Innovation
+    </p>
+    <div class="hero-cta">
+      <a href="#skills" class="btn-primary"><i class="fas fa-seedling"></i> &nbsp;View My Skills</a>
+      <a href="#contact" class="btn-outline">Get in Touch</a>
+    </div>
+  </div>
+
+  <!-- Grass silhouette -->
+  <div class="hero-grass">
+    <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path fill="#f8f4ec"
+        d="M0,80 C120,40 240,110 360,70 C480,30 600,100 720,65 C840,30 960,90 1080,55 C1200,20 1320,80 1440,50 L1440,120 L0,120 Z"/>
+    </svg>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about">
+  <div class="reveal">
+    <p class="section-label">Who I Am</p>
+    <h2 class="section-title">Agriculture Meets<br>Innovation</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-photo-wrap reveal">
+      <div class="about-photo-frame" id="photoFrame">
+        <!-- Photo will load from file; fallback placeholder shown if not found -->
+        <img src="Purva Patil Photo.png" alt="Purva Patil"
+             onerror="this.parentElement.innerHTML='<div class=\'photo-placeholder\'><i class=\'fas fa-user\'></i><span>Photo Here</span></div>'">
+      </div>
+      <div class="about-badge-float">
+        <div class="big">🌱</div>
+        Aspiring<br>Agri-Scientist
+      </div>
+      <div class="about-photo-accent"></div>
+    </div>
+    <div class="about-text reveal">
+      <h3>Hello, I'm Purva 👋</h3>
+      <p>I'm a passionate B.Sc. Agriculture (Hons.) student at Mahatma Phule Krishi Vidyapeeth, specialising in Agronomy and Crop Science. I believe that sustainable agriculture is the foundation of a secure future.</p>
+      <p>My curiosity extends beyond the field — I'm deeply interested in how AI, data-driven tools, and modern technology can revolutionise smart farming and food security in India and beyond.</p>
+      <p>I bring hands-on experience in crop & soil management, seed production, and organic input preparation, combined with a growing digital skillset and leadership experience as an Alumni Coordinator at Aspire Institute.</p>
+      <div class="about-stats">
+        <div class="stat-item">
+          <div class="stat-num">2024</div>
+          <div class="stat-label">Started Degree</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">87%</div>
+          <div class="stat-label">Secondary Score</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">6+</div>
+          <div class="stat-label">Core Skills</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">3</div>
+          <div class="stat-label">Languages</div>
+        </div>
+      </div>
+      <div class="about-tags">
+        <span class="tag">🌾 Agronomy</span>
+        <span class="tag">♻️ Sustainability</span>
+        <span class="tag">🤖 Agri-Tech</span>
+        <span class="tag">🌱 Organic Farming</span>
+        <span class="tag">📊 Data Driven</span>
+      </div>
+      <a href="Purva_Patil_Resume.pdf" download class="btn-download">
+        <i class="fas fa-download"></i> Download Resume
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EDUCATION ===== -->
+<section id="education">
+  <div class="reveal">
+    <p class="section-label">Academic Path</p>
+    <h2 class="section-title">Education &amp;<br>Qualifications</h2>
+    <p class="section-subtitle">A journey rooted in agricultural science and a commitment to lifelong learning.</p>
+  </div>
+
+  <div class="timeline">
+
+    <!-- Current -->
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"><i class="fas fa-circle" style="font-size:6px;color:var(--sage)"></i></div>
+      <div class="timeline-card">
+        <span class="timeline-year">2024 – Present</span>
+        <h3>B.Sc. Agriculture (Hons.) — Agronomy &amp; Crop Science</h3>
+        <div class="institution"><i class="fas fa-university" style="margin-right:6px"></i>Mahatma Phule Krishi Vidyapeeth, Rahuri</div>
+        <p>Pursuing an honours degree with a focus on Agronomy, Crop Science, and modern agricultural practices. Exploring intersections of technology and farming.</p>
+        <span class="score"><i class="fas fa-star"></i> Currently Enrolled</span>
+      </div>
+    </div>
+
+    <!-- HSC -->
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <span class="timeline-year">Higher Secondary</span>
+        <h3>Higher Secondary Certificate (HSC)</h3>
+        <div class="institution"><i class="fas fa-school" style="margin-right:6px"></i>Shri Datta Kanishtha Mahavidyalaya</div>
+        <p>Completed higher secondary education with a foundation in science subjects, building the academic base for an agricultural career.</p>
+        <span class="score"><i class="fas fa-percent"></i> 62.83%</span>
+      </div>
+    </div>
+
+    <!-- SSC -->
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <span class="timeline-year">Secondary School</span>
+        <h3>Secondary School Certificate (SSC)</h3>
+        <div class="institution"><i class="fas fa-graduation-cap" style="margin-right:6px"></i>Girls' High School, Sainik Takli</div>
+        <p>Achieved an outstanding score in secondary school, demonstrating strong academic foundations and a dedication to excellence from an early age.</p>
+        <span class="score"><i class="fas fa-medal"></i> 87.20%</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== SKILLS ===== -->
+<section id="skills">
+  <div class="reveal">
+    <p class="section-label">Expertise</p>
+    <h2 class="section-title">Skills &amp; Competencies</h2>
+    <p class="section-subtitle">A blend of agricultural expertise and digital proficiency, ready for the future of farming.</p>
+  </div>
+
+  <div class="skills-layout">
+    <!-- Agricultural Skills -->
+    <div class="skills-col reveal">
+      <h3><i class="fas fa-tractor"></i> Agricultural Skills</h3>
+
+      <div class="skill-card">
+        <div class="skill-top">
+          <div class="skill-name">
+            <div class="icon-circle"><i class="fas fa-boxes-stacked"></i></div>
+            Post Harvest Technology
+          </div>
+          <span class="skill-pct">88%</span>
+        </div>
+        <div class="skill-bar"><div class="skill-bar-fill" data-width="88"></div></div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-top">
+          <div class="skill-name">
+            <div class="icon-circle"><i class="fas fa-certificate"></i></div>
+            Seed Production &amp; Certification
+          </div>
+          <span class="skill-pct">82%</span>
+        </div>
+        <div class="skill-bar"><div class="skill-bar-fill" data-width="82"></div></div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-top">
+          <div class="skill-name">
+            <div class="icon-circle"><i class="fas fa-tractor"></i></div>
+            Farm Operations
+          </div>
+          <span class="skill-pct">85%</span>
+        </div>
+        <div class="skill-bar"><div class="skill-bar-fill" data-width="85"></div></div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-top">
+          <div class="skill-name">
+            <div class="icon-circle"><i class="fas fa-leaf"></i></div>
+            Organic Input Preparation
+          </div>
+          <span class="skill-pct">80%</span>
+        </div>
+        <div class="skill-bar"><div class="skill-bar-fill" data-width="80"></div></div>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-top">
+          <div class="skill-name">
+            <div class="icon-circle"><i class="fas fa-seedling"></i></div>
+            Crop &amp; Soil Management
+          </div>
+          <span class="skill-pct">90%</span>
+        </div>
+        <div class="skill-bar"><div class="skill-bar-fill" data-width="90"></div></div>
+      </div>
+    </div>
+
+    <!-- Digital & Soft Skills -->
+    <div class="skills-col reveal">
+      <h3><i class="fas fa-laptop-code"></i> Digital &amp; AI Skills</h3>
+      <div class="digital-pills">
+        <div class="digital-pill"><i class="fab fa-microsoft"></i> MS Word</div>
+        <div class="digital-pill"><i class="fas fa-file-powerpoint"></i> PowerPoint</div>
+        <div class="digital-pill"><i class="fas fa-search"></i> Internet Research</div>
+        <div class="digital-pill"><i class="fas fa-robot"></i> ChatGPT</div>
+        <div class="digital-pill"><i class="fas fa-gem"></i> Google Gemini</div>
+        <div class="digital-pill"><i class="fas fa-globe"></i> Digital Literacy</div>
+      </div>
+
+      <br>
+      <h3 style="margin-top:1.5rem"><i class="fas fa-comments"></i> Languages</h3>
+      <div class="lang-grid" style="margin-top:1rem; display:flex; gap:10px; flex-wrap:wrap;">
+        <div class="lang-card" style="min-width:100px; flex:1;">
+          <div class="lang-flag">🇮🇳</div>
+          <div class="lang-name">Hindi</div>
+          <div class="lang-level">Fluent</div>
+        </div>
+        <div class="lang-card" style="min-width:100px; flex:1;">
+          <div class="lang-flag">🇬🇧</div>
+          <div class="lang-name">English</div>
+          <div class="lang-level">Proficient</div>
+        </div>
+        <div class="lang-card" style="min-width:100px; flex:1;">
+          <div class="lang-flag">🇮🇳</div>
+          <div class="lang-name">Marathi</div>
+          <div class="lang-level">Native</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LEADERSHIP / EXPERIENCE ===== -->
+<section id="experience">
+  <div class="reveal">
+    <p class="section-label">Experience</p>
+    <h2 class="section-title">Leadership &amp;<br>Engagement</h2>
+    <p class="section-subtitle">Taking initiative and making an impact beyond the classroom.</p>
+  </div>
+
+  <div class="experience-grid">
+    <div class="exp-card reveal">
+      <div class="exp-icon"><i class="fas fa-users-between-lines"></i></div>
+      <div class="exp-role">Alumni Coordinator</div>
+      <div class="exp-org">Aspire Institute</div>
+      <div class="exp-period"><i class="fas fa-map-marker-alt" style="margin-right:4px;color:var(--sage)"></i>Remote &nbsp;·&nbsp; <i class="fas fa-calendar" style="margin-right:4px;color:var(--sage)"></i>Ongoing</div>
+      <p class="exp-desc">Managing global alumni engagement and coordination for Aspire Institute's international network. Supporting leadership development initiatives and maintaining connections with a diverse alumni community across regions.</p>
+      <div class="exp-tags">
+        <span class="exp-tag">Leadership</span>
+        <span class="exp-tag">Community Building</span>
+        <span class="exp-tag">Remote Coordination</span>
+        <span class="exp-tag">Global Network</span>
+      </div>
+    </div>
+
+    <div class="exp-card reveal" style="transition-delay:0.15s">
+      <div class="exp-icon"><i class="fas fa-seedling"></i></div>
+      <div class="exp-role">Agriculture Student Researcher</div>
+      <div class="exp-org">Mahatma Phule Krishi Vidyapeeth</div>
+      <div class="exp-period"><i class="fas fa-map-marker-alt" style="margin-right:4px;color:var(--sage)"></i>Rahuri, Maharashtra &nbsp;·&nbsp; <i class="fas fa-calendar" style="margin-right:4px;color:var(--sage)"></i>2024 – Present</div>
+      <p class="exp-desc">Conducting practical field studies in agronomy, crop management, and post-harvest technology. Actively exploring AI tools and data-driven approaches to improve sustainable farming outcomes.</p>
+      <div class="exp-tags">
+        <span class="exp-tag">Field Research</span>
+        <span class="exp-tag">Agronomy</span>
+        <span class="exp-tag">Crop Science</span>
+        <span class="exp-tag">AI in Agriculture</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INTERESTS ===== -->
+<section id="interests">
+  <div class="reveal">
+    <p class="section-label">Passions</p>
+    <h2 class="section-title">Areas of Interest</h2>
+    <p class="section-subtitle">Where my academic knowledge meets my passion for positive change.</p>
+  </div>
+
+  <div class="interest-grid">
+    <div class="interest-card reveal">
+      <span class="interest-icon">🌿</span>
+      <div class="interest-name">Sustainable Agriculture</div>
+      <div class="interest-desc">Eco-friendly farming for the future</div>
+    </div>
+    <div class="interest-card reveal" style="transition-delay:0.08s">
+      <span class="interest-icon">🌾</span>
+      <div class="interest-name">Agronomy</div>
+      <div class="interest-desc">Crop management &amp; soil science</div>
+    </div>
+    <div class="interest-card reveal" style="transition-delay:0.16s">
+      <span class="interest-icon">🔬</span>
+      <div class="interest-name">Crop Science</div>
+      <div class="interest-desc">Genetics, growth &amp; productivity</div>
+    </div>
+    <div class="interest-card reveal" style="transition-delay:0.24s">
+      <span class="interest-icon">🍃</span>
+      <div class="interest-name">Organic Farming</div>
+      <div class="interest-desc">Chemical-free, natural methods</div>
+    </div>
+    <div class="interest-card reveal" style="transition-delay:0.32s">
+      <span class="interest-icon">🚀</span>
+      <div class="interest-name">Agri-Tech Innovation</div>
+      <div class="interest-desc">Modern tech meets agriculture</div>
+    </div>
+    <div class="interest-card reveal" style="transition-delay:0.40s">
+      <span class="interest-icon">🤖</span>
+      <div class="interest-name">AI in Agriculture</div>
+      <div class="interest-desc">Data-driven smart farming</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact">
+  <div class="reveal">
+    <p class="section-label">Say Hello</p>
+    <h2 class="section-title">Let's Connect</h2>
+    <p class="section-subtitle">Whether you'd like to collaborate, discuss agriculture, or just say hi — I'd love to hear from you!</p>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <h3>Contact Information</h3>
+      <p>I'm always open to new opportunities, collaborations, and conversations about the future of agriculture. Feel free to reach out!</p>
+
+      <a href="mailto:patilpurva964@gmail.com" class="contact-item">
+        <div class="contact-item-icon"><i class="fas fa-envelope"></i></div>
+        <div class="contact-item-text">
+          <div class="contact-item-label">Email</div>
+          <div class="contact-item-val">patilpurva964@gmail.com</div>
+        </div>
+      </a>
+
+      <a href="tel:+917058721412" class="contact-item">
+        <div class="contact-item-icon"><i class="fas fa-phone"></i></div>
+        <div class="contact-item-text">
+          <div class="contact-item-label">Phone</div>
+          <div class="contact-item-val">+91 7058721412</div>
+        </div>
+      </a>
+
+      <div class="contact-item">
+        <div class="contact-item-icon"><i class="fas fa-map-marker-alt"></i></div>
+        <div class="contact-item-text">
+          <div class="contact-item-label">Location</div>
+          <div class="contact-item-val">Kolhapur, Maharashtra, India</div>
+        </div>
+      </div>
+
+      <div class="contact-socials">
+        <a href="https://www.linkedin.com/in/purva-patil-067306365" target="_blank" class="social-btn linkedin" title="LinkedIn">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="mailto:patilpurva964@gmail.com" class="social-btn email" title="Email">
+          <i class="fas fa-envelope"></i>
+        </a>
+        <a href="Purva_Patil_Resume.pdf" download class="social-btn" style="border-color:var(--earth);color:var(--earth);background:rgba(139,111,71,0.07)" title="Download Resume">
+          <i class="fas fa-download"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="contact-form-wrap reveal">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="fname" placeholder="Your first name">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="lname" placeholder="Your last name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="femail" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <input type="text" id="fsubject" placeholder="What's this about?">
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="fmessage" placeholder="Write your message here..."></textarea>
+      </div>
+      <button class="btn-send" onclick="sendMessage()">
+        <i class="fas fa-paper-plane"></i> Send Message
+      </button>
+      <div id="form-success" style="display:none; margin-top:1rem; text-align:center; color:var(--emerald); font-weight:600; font-size:0.9rem;">
+        <i class="fas fa-check-circle"></i> Message sent successfully! I'll get back to you soon.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-logo">Purva<span>.</span></div>
+  <p class="footer-tagline">B.Sc. Agriculture (Hons.) · Agronomy · Agri-Tech · Sustainable Farming</p>
+  <div class="footer-socials">
+    <a href="https://www.linkedin.com/in/purva-patil-067306365" target="_blank" class="footer-social" title="LinkedIn">
+      <i class="fab fa-linkedin-in"></i>
+    </a>
+    <a href="mailto:patilpurva964@gmail.com" class="footer-social" title="Email">
+      <i class="fas fa-envelope"></i>
+    </a>
+    <a href="tel:+917058721412" class="footer-social" title="Phone">
+      <i class="fas fa-phone"></i>
+    </a>
+  </div>
+  <p class="footer-copy">
+    &copy; 2025 Purva Patil. Crafted with <span style="color:var(--sage)">❤️</span> for a greener future.
+    &nbsp;·&nbsp; <a href="Purva_Patil_Resume.pdf" download>Download Resume</a>
+  </p>
+</footer>
+
+<!-- Back to Top -->
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+  /* ---------- Loader ---------- */
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hide');
+    }, 2000);
+  });
+
+  /* ---------- Navbar scroll effect ---------- */
+  const navbar = document.getElementById('navbar');
+  const backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 80) {
+      navbar.classList.add('scrolled');
+      backTop.classList.add('show');
+    } else {
+      navbar.classList.remove('scrolled');
+      backTop.classList.remove('show');
+    }
+  });
+
+  /* ---------- Mobile hamburger ---------- */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+  function closeMobileMenu() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+  }
+
+  /* ---------- Scroll reveal ---------- */
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Animate skill bars when visible
+        entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+          const w = bar.getAttribute('data-width');
+          if (w) bar.style.width = w + '%';
+        });
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  /* ---------- Also animate skill bars if already visible ---------- */
+  setTimeout(() => {
+    document.querySelectorAll('.reveal.visible .skill-bar-fill').forEach(bar => {
+      const w = bar.getAttribute('data-width');
+      if (w) bar.style.width = w + '%';
+    });
+  }, 300);
+
+  /* ---------- Contact form ---------- */
+  function sendMessage() {
+    const fname = document.getElementById('fname').value.trim();
+    const lname = document.getElementById('lname').value.trim();
+    const femail = document.getElementById('femail').value.trim();
+    const fmessage = document.getElementById('fmessage').value.trim();
+    if (!fname || !femail || !fmessage) {
+      alert('Please fill in at least your name, email, and message.');
+      return;
+    }
+    // Compose mailto
+    const subject = document.getElementById('fsubject').value.trim() || 'Portfolio Contact';
+    const body = `Name: ${fname} ${lname}\nEmail: ${femail}\n\n${fmessage}`;
+    window.location.href = `mailto:patilpurva964@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    document.getElementById('form-success').style.display = 'block';
+    // Clear form
+    ['fname','lname','femail','fsubject','fmessage'].forEach(id => document.getElementById(id).value = '');
+  }
+
+  /* ---------- Smooth section offset for sticky nav ---------- */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        const offset = 80;
+        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
